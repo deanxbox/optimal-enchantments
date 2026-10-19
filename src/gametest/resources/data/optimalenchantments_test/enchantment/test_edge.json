@@ -1,0 +1,11 @@
+{
+  "anvil_cost": 14,
+  "description": {"text": "Test Edge"},
+  "effects": {},
+  "max_cost": {"base": 30, "per_level_above_first": 10},
+  "max_level": 2,
+  "min_cost": {"base": 1, "per_level_above_first": 10},
+  "slots": ["mainhand"],
+  "supported_items": ["minecraft:diamond_sword"],
+  "weight": 1
+}

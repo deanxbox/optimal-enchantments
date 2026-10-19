@@ -1,0 +1,75 @@
+plugins {
+    id "net.fabricmc.fabric-loom" version "1.17.21"
+    id "java"
+    id "com.modrinth.minotaur" version "2.10.0"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name + "-" + project.minecraft_version
+}
+
+repositories {
+    maven { url = "https://maven.terraformersmc.com/releases/" }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    implementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:5.11.4"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.11.4"
+}
+
+tasks.named("test") { useJUnitPlatform() }
+
+fabricApi.configureTests {
+    createSourceSet = true
+    enableGameTests = false
+    enableClientGameTests = true
+    modId = "optimalenchantments_test"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+    filteringCharset "UTF-8"
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version, "minecraft_version": project.minecraft_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.release = 25
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") { rename { "${it}_${project.base.archivesName.get()}" } }
+}
+
+modrinth {
+    token = providers.environmentVariable("MODRINTH_TOKEN").orElse("").get()
+    projectId = "optimal-enchantments"
+    versionNumber = project.mod_version + "+" + project.minecraft_version
+    versionName = "Optimal Enchantments " + project.mod_version + " (" + project.minecraft_version + ")"
+    versionType = "alpha"
+    uploadFile = tasks.jar
+    gameVersions = [project.minecraft_version]
+    loaders = ["fabric"]
+    dependencies {
+        required.project "fabric-api"
+        required.project "modmenu"
+    }
+}

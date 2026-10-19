@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "optimalenchantments",
+  "version": "${version}",
+  "name": "Optimal Enchantments",
+  "description": "Plan enchantments, compare anvil costs, and follow the next combination in your inventory.",
+  "license": "MIT",
+  "authors": ["deanxbox"],
+  "icon": "assets/optimalenchantments/icon.png",
+  "contact": { "homepage": "https://github.com/deanxbox" },
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.optimalenchantments.OptimalEnchantments"],
+    "modmenu": ["dev.optimalenchantments.ModMenuIntegration"]
+  },
+  "mixins": ["optimalenchantments.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=25",
+    "fabric-api": ">=0.164.0",
+    "modmenu": ">=21.0.0"
+  }
+}
