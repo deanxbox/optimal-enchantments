@@ -1,0 +1,25 @@
+name: Publish to Modrinth
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch to publish (26.1, 26.2 or main)
+        required: true
+        default: main
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - run: chmod +x gradlew
+      - run: ./gradlew build modrinth
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
