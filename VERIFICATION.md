@@ -1,15 +1,8 @@
-# Verification — 26.3
+# Verification — 26.1
 
-**Latest edits (live plan, persistence, item tooltips, hammer, auto-clear, stable ordering):** the user reports a successful `gradlew build`. GameTests and in-game behaviour have not been run. The historical results below describe earlier revisions.
+Observed 2026-10-20 on this branch: gradlew build and gradlew runClientGameTest both succeeded (Fabric API 0.145.1+26.1, Mod Menu 18.0.2). Ordering, anvil highlight, hammer, tooltip and auto-clear behaviour were not exercised by hand in game on this branch.
 
-| Current follow-up check | Result | Evidence / next check |
-| --- | --- | --- |
-| Compact panel and vanilla framing | not_run | Source uses a centered frame capped at 640 x 320 GUI pixels including side borders, shrinking with the viewport; manual visual approval needed at normal and high GUI scales |
-| Retain order on close/reopen | not_run | Shared planner calculation survives screen removal; selection/connection changes invalidate it; updated client test awaits execution |
-| Specific missing inputs without background | not_run | Removed guidance fill; wraps equipment/book names and levels; updated client test awaits execution |
-| Build, solver tests, client launch | not_run | Build reported successful by the user; solver tests, runClient and GameTests not re-run on the latest edits |
-
-Observed on 2026-10-19 with Java 25.0.1, Gradle 9.7.0, Loom 1.17.21, Fabric Loader 0.19.5, Fabric API 0.164.0+26.3 and Mod Menu 21.0.0.
+Behaviour verified on main (26.3) is listed below; it was not re-run per branch beyond the GameTest above.
 
 | Check | Result | Evidence |
 | --- | --- | --- |
