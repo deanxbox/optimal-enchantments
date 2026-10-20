@@ -18,7 +18,7 @@
     "fabricloader": ">=0.19.5",
     "minecraft": "~${minecraft_version}",
     "java": ">=25",
-    "fabric-api": ">=0.164.0",
-    "modmenu": ">=21.0.0"
+    "fabric-api": ">=0.161.0",
+    "modmenu": ">=20.0.3"
   }
 }
