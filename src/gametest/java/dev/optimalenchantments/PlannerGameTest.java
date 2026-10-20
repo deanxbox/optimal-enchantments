@@ -26,7 +26,7 @@ public final class PlannerGameTest implements FabricClientGameTest {
         context.setScreen(() -> new ModMenuIntegration().getModConfigScreenFactory().create(null));
         context.waitForScreen(PlannerScreen.class);
         context.runOnClient(client -> {
-            if (!((PlannerScreen) client.gui.screen()).resultLines().equals(java.util.List.of("Select levels, then calculate an order.")))
+            if (!((PlannerScreen) client.screen).resultLines().equals(java.util.List.of("Select levels, then calculate an order.")))
                 throw new AssertionError("New session unexpectedly restored an order");
         });
         context.takeScreenshot("planner-offline");
@@ -57,7 +57,7 @@ public final class PlannerGameTest implements FabricClientGameTest {
                 menu.broadcastChanges();
             });
             context.waitForScreen(AnvilScreen.class);
-            context.waitFor(client -> ((AnvilScreen) client.gui.screen()).getMenu().getSlot(5).hasItem());
+            context.waitFor(client -> ((AnvilScreen) client.screen).getMenu().getSlot(5).hasItem());
             context.runOnClient(client -> {
                 if (EnchantmentCatalog.enchantments().isEmpty()) throw new AssertionError("Empty connected registry");
                 var custom = EnchantmentCatalog.enchantments().stream().filter(e -> EnchantmentCatalog.id(e).equals("optimalenchantments_test:test_edge")).findFirst().orElseThrow();
@@ -86,7 +86,7 @@ public final class PlannerGameTest implements FabricClientGameTest {
                 OptimalEnchantments.config.enchantments.put("minecraft:sharpness", 5);
                 OptimalEnchantments.config.enchantments.put("minecraft:unbreaking", 3);
                 var service = new PlanService();
-                var menu = ((AnvilScreen) client.gui.screen()).getMenu();
+                var menu = ((AnvilScreen) client.screen).getMenu();
                 service.update(OptimalEnchantments.config, menu, true);
                 if (service.targetSlot() != 4) throw new AssertionError("Did not choose closest weapon");
                 service.cancel();
@@ -111,7 +111,7 @@ public final class PlannerGameTest implements FabricClientGameTest {
             context.clickScreenButton("Optimal Enchantments");
             context.waitForScreen(PlannerScreen.class);
             context.runOnClient(client -> {
-                var buttons = Screens.getWidgets(client.gui.screen());
+                var buttons = Screens.getWidgets(client.screen);
                 if (buttons.stream().anyMatch(button -> java.util.Set.of("Equipment", "Enchantments", "Order", "Rules").contains(button.getMessage().getString())))
                     throw new AssertionError("Old tab navigation still present");
                 if (buttons.stream().noneMatch(button -> button.getMessage().getString().equals("5")))
@@ -121,11 +121,11 @@ public final class PlannerGameTest implements FabricClientGameTest {
             context.takeScreenshot("planner-enchantments");
             context.clickScreenButton("Calculate order"); // forces a fresh calculation
             context.waitFor(client -> {
-                var lines = ((PlannerScreen) client.gui.screen()).resultLines();
+                var lines = ((PlannerScreen) client.screen).resultLines();
                 return !lines.equals(java.util.List.of("Calculating…"));
             });
             context.runOnClient(client -> {
-                var lines = ((PlannerScreen) client.gui.screen()).resultLines();
+                var lines = ((PlannerScreen) client.screen).resultLines();
                 if (lines.stream().noneMatch(line -> line.startsWith("1. "))) throw new AssertionError("No calculated order");
                 savedOrder.set(lines);
             });
@@ -133,7 +133,7 @@ public final class PlannerGameTest implements FabricClientGameTest {
             context.clickScreenButton("Done");
             context.waitForScreen(AnvilScreen.class);
             context.runOnClient(client -> {
-                AnvilScreen anvil = (AnvilScreen) client.gui.screen();
+                AnvilScreen anvil = (AnvilScreen) client.screen;
                 if (anvil.getMenu().getSlot(4).getItem().isEmpty()) throw new AssertionError("Planner removed item");
                 if (PlannerConfig.load().enchantments.size() != 2) throw new AssertionError("Config failed roundtrip");
             });
@@ -146,17 +146,17 @@ public final class PlannerGameTest implements FabricClientGameTest {
                 if (menu.getCost() != 3) throw new AssertionError("Vanilla anvil cost changed");
                 menu.broadcastChanges();
             });
-            context.waitFor(client -> ((AnvilScreen) client.gui.screen()).getMenu().getSlot(0).hasItem());
+            context.waitFor(client -> ((AnvilScreen) client.screen).getMenu().getSlot(0).hasItem());
             context.clickScreenButton("Optimal Enchantments");
             context.waitForScreen(PlannerScreen.class);
             context.runOnClient(client -> {
-                if (!((PlannerScreen) client.gui.screen()).resultLines().equals(savedOrder.get()))
+                if (!((PlannerScreen) client.screen).resultLines().equals(savedOrder.get()))
                     throw new AssertionError("Closing and reopening lost the calculated order");
             });
             context.clickScreenButton("Done");
             context.waitForScreen(AnvilScreen.class);
             context.runOnClient(client -> {
-                AnvilMenu menu = ((AnvilScreen) client.gui.screen()).getMenu();
+                AnvilMenu menu = ((AnvilScreen) client.screen).getMenu();
                 if (!menu.getSlot(0).hasItem() || !menu.getSlot(1).hasItem()) throw new AssertionError("Planner cleared anvil inputs");
             });
             world.getServer().runOnServer(server -> {
@@ -167,7 +167,7 @@ public final class PlannerGameTest implements FabricClientGameTest {
                 menu.broadcastChanges();
             });
             context.waitFor(client -> {
-                var menu = ((AnvilScreen) client.gui.screen()).getMenu();
+                var menu = ((AnvilScreen) client.screen).getMenu();
                 return !menu.getSlot(0).hasItem() && !menu.getSlot(1).hasItem();
             });
             context.waitTicks(25);
@@ -182,7 +182,7 @@ public final class PlannerGameTest implements FabricClientGameTest {
             context.clickScreenButton("Optimal Enchantments");
             context.waitForScreen(PlannerScreen.class);
             context.runOnClient(client -> {
-                if (!((PlannerScreen) client.gui.screen()).resultLines().equals(java.util.List.of("Select levels, then calculate an order.")))
+                if (!((PlannerScreen) client.screen).resultLines().equals(java.util.List.of("Select levels, then calculate an order.")))
                     throw new AssertionError("Cleared selection restored a stale order");
             });
             context.clickScreenButton("Done");

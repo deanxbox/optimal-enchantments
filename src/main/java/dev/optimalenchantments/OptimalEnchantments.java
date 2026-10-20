@@ -47,7 +47,7 @@ public final class OptimalEnchantments implements ClientModInitializer {
             int y = (height - 166) / 2;
             var button = new PlannerButton(x + 3, y + 3, 22, 22, "Optimal Enchantments", ignored -> {
                 openingPlanner = true;
-                try { client.gui.setScreen(new PlannerScreen(anvil)); }
+                try { client.setScreen(new PlannerScreen(anvil)); }
                 finally { openingPlanner = false; }
             }, new ItemStack(Items.ENCHANTED_BOOK));
             button.setTooltip(Tooltip.create(Component.literal("Plan your enchantment order")));
@@ -67,7 +67,7 @@ public final class OptimalEnchantments implements ClientModInitializer {
                 hammer.active = anvil.getMenu().getCarried().isEmpty();
             });
             // After the slots (the background would hide an earlier draw); tooltips are deferred, so they stay on top.
-            ScreenEvents.afterForeground(screen).register((s, graphics, mx, my, delta) -> drawGuidance(anvil, plan, graphics, x, y, width, mx, my));
+            ScreenEvents.afterExtract(screen).register((s, graphics, mx, my, delta) -> drawGuidance(anvil, plan, graphics, x, y, width, mx, my));
         });
     }
 

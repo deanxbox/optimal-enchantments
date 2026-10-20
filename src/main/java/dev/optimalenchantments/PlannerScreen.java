@@ -386,8 +386,8 @@ public final class PlannerScreen extends Screen {
     @Override
     public void onClose() {
         save();
-        if (parent instanceof AnvilScreen && anvilMenu() == null) minecraft.gui.setScreen(null);
-        else minecraft.gui.setScreen(parent);
+        if (parent instanceof AnvilScreen && anvilMenu() == null) minecraft.setScreen(null);
+        else minecraft.setScreen(parent);
     }
 
     @Override public boolean isPauseScreen() { return false; }
